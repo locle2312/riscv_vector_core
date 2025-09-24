@@ -31,7 +31,7 @@ logic fetch_stall;
 
 assign pm_rd_o = ~fetch_stall_i;
 assign pm_addr_o = pc;
-assign fetch_stall = (pm_rd_o & ~pm_ready_i) | (instr_valid_o & ~instr_ready_i);
+assign fetch_stall = (pm_rd_o & ~pm_ready_i) | ~instr_ready_i;
 
 always_ff @(posedge clk_i or negedge rst_ni) begin: pc_proc
     if (~rst_ni) pc <= boot_addr_i;
