@@ -1,7 +1,8 @@
-typedef enum logic [3:0] { 
-    ALU_NONE,
-    ALU_ADD
-    ALU_SUB
+typedef enum logic [3:0] {
+    ALU_NONE, 
+    ALU_ADD,
+    ALU_LUI,
+    ALU_SUB,
     ALU_SHIFT_LEFT,
     ALU_SHIFT_RIGHT,
     ALU_SHIFT_RIGHT_ARTH,
@@ -33,9 +34,3 @@ typedef enum logic [1:0] {
     D_REM,
     D_REMU
 } div_op_t;
-
-typedef enum logic [1:0] {
-    CSR_CSRW,
-    CSR_CSRS,
-    CSR_CSRC
-} csr_op_t

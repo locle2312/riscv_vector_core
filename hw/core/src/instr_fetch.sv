@@ -29,22 +29,24 @@ localparam int unsigned InstrSizeByte = XLEN/8;
 logic [XLEN-1:0] pc, pc_r;
 logic fetch_stall;
 
-assign pm_rd_o = ~fetch_stall_i;
+assign pm_rd_o = ~fetch_stall;
 assign pm_addr_o = pc;
-assign fetch_stall = (pm_rd_o & ~pm_ready_i) | ~instr_ready_i;
+assign fetch_stall = fetch_stall_i | ~instr_ready_i;
 
 always_ff @(posedge clk_i or negedge rst_ni) begin: pc_proc
     if (~rst_ni) pc <= boot_addr_i;
     else begin
-        if (!fetch_stall) pc <= pc + InstrSizeByte;
+        if (~fetch_stall & pm_ready_i) pc <= pc + InstrSizeByte;
         if (branch_pc_valid_i) pc <= branch_pc_i;
     end
 end
 
-always_ff @(posedge clk_i) pc_r <= pc;
-
-assign instr_pc_o = pc_r;
-assign instr_valid_o = pm_instr_valid_i;
-assign instr_o = pm_instr_i;
+// Assume 1 cycle read mem delay
+always_ff @(posedge clk_i) begin
+    pc_r <= pc;
+    instr_pc_o <= pc_r;
+    instr_valid_o <= pm_instr_valid_i;
+    instr_o <= pm_instr_i;
+end
     
 endmodule
