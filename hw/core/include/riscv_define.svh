@@ -1,7 +1,6 @@
 typedef enum logic [3:0] {
     ALU_NONE, 
     ALU_ADD,
-    ALU_LUI,
     ALU_SUB,
     ALU_SHIFT_LEFT,
     ALU_SHIFT_RIGHT,

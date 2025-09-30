@@ -13,15 +13,44 @@ module alu #(
 );
 
 logic [XLEN-1:0] sub_result;
-logic [XLEN-1:0] add_result;
 
 assign sub_result = operand_i[0] - operand_i[1];
-assign sub_result = operand_i[0] + operand_i[1];
 
 always_comb begin
     unique case (alu_op_i)
-        : 
-        default: 
+        ALU_NONE: begin
+            operand_wdata_o = operand_i[1];
+        end
+        ALU_ADD: begin
+            operand_wdata_o = operand_i[0] + operand_i[1];
+        end
+        ALU_SUB: begin
+            operand_wdata_o = sub_result;
+        end
+        ALU_SHIFT_LEFT: begin
+            operand_wdata_o = operand_i[0] << operand_i[1];
+        end
+        ALU_SHIFT_RIGHT: begin
+            operand_wdata_o = operand_i[0] >> operand_i[1];
+        end
+        ALU_SHIFT_RIGHT_ARTH: begin
+            operand_wdata_o = {{operand_i[1]{operand_i[0][31]}}, operand_i[0][31:operand_i[1]]};
+        end
+        ALU_LESS_THAN: begin
+            operand_wdata_o = operand_i[0][31] != operand_i[1][31] ? operand_i[1][31] == 1'b1 : sub_result[31] == 1'b1;
+        end
+        ALU_LESS_THAN_S: begin
+            operand_wdata_o = operand_i[0][31] != operand_i[1][31] ? operand_i[0][31] == 1'b1 : sub_result[31] == 1'b1;
+        end
+        ALU_AND: begin
+            operand_wdata_o = operand_i[0] & operand_i[1];
+        end
+        ALU_OR: begin
+            operand_wdata_o = operand_i[0] | operand_i[1];
+        end
+        ALU_XOR: begin
+            operand_wdata_o = operand_i[0] ^ operand_i[1];
+        end
     endcase
 end
     
